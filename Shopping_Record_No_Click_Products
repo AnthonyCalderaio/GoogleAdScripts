@@ -1,0 +1,175 @@
+function main() {
+  
+  var testingMode = false
+  Logger.log("WARNING: Never run in production mode. This will cause redundant data in the database.")
+  //"Purpose: The purpose of this script is to extract all the products of the shopping campain with no clicks and to record them to a google sheet database. Ideally, this script runs every day at the same time to pull the products for the last 30 days up to that day."
+  if(testingMode===true){
+      Logger.log("INSTRUCTIONS: To run in Production Mode: Edit the variable called "+"\""+"testingMode"+"\""+" at the top of this script and change it to"+"\""+"false"+"\""+". Also Make sure you set the script to run daily at a regular time."+"\n")
+      Logger.log("\n")
+  }
+  if (testingMode === false){
+      Logger.log("INSTRUCTIONS: To run in Test Mode: Edit the variable called "+"\""+"testingMode"+"\""+" at the top of this script and change it to"+"\""+"true\""+" and run with the"+"\""+"PREVIEW"+"\""+" button."+"\n")
+      Logger.log("\n")
+  }
+  
+  var now = new Date();
+
+  //We need to specify a Time Zone to get a today variable
+  var timeZone = AdsApp.currentAccount().getTimeZone();
+
+  //Set the variable 'today' to pioint to todays date 
+  var today = Utilities.formatDate(now, timeZone, 'yyyyMMdd');
+
+
+  //Date Varibales
+
+  //Now in String form
+  var stringNow = now.toString();
+
+  //Today in String form
+  var todayString = today.toString();
+  
+  //Year date in YYYY format
+  var year = todayString.slice(0,4);
+
+  //Month date in MM format
+  var monthDig = todayString.slice(4,6);
+
+  //Day date in DD format
+  var todaysNumberDate = stringNow.slice(8,10);
+  	
+  //Number date turned to integer
+  var numberDate = Number(todaysNumberDate);
+  numberDate = Math.round(numberDate);
+  
+  var ShoppingCampaign = AdWordsApp.shoppingCampaigns().get();
+   	
+  var productArray = []
+
+  var SPREADSHEET_URL = 'https://docs.google.com/spreadsheets/d/131uTk3lTVuf4UrTYvJwxjyvpjlgogRRZLQlFXwHnPFw/edit#gid=0';
+  
+  var SHEET_NAME = 'Sheet1';
+
+  var ss = SpreadsheetApp.openByUrl(SPREADSHEET_URL);
+  
+  var sheet = ss.getSheetByName(SHEET_NAME);
+
+  function isProduct(input) 
+  {
+    if (input.getValue() === null ||
+        input.getValue() === "am tags" ||
+        input.getValue() === "am labels" ||
+        input.getValue() === "rf tags" ||
+        input.getValue() === "rf labels" ||
+        input.getValue() === "OtherCase")
+    {
+    	return false;
+    }else{
+    	return true;
+    }
+  }
+  var counter = 0;
+  var productGroups = AdsApp.productGroups().get();
+  //Utility
+  //sheet.clearContents();
+  if (testingMode===false)
+  {
+  	sheet.appendRow(["Product","Impressions","Date","Counter","Changes"]);
+  }
+  if(testingMode === true)
+  {
+  	Logger.log("---Testing Mode---")
+    Logger.log("The following are shopping campaign products with no clicks for the past 30 days...")
+    Logger.log("\n")
+  }
+  if(testingMode === false)
+  {
+  	Logger.log("---Production Mode---")
+    Logger.log("I hope you know what you are doing!")
+    Logger.log("\n")
+  }
+  var noClickCounter = 0;
+  while (productGroups.hasNext()) {
+    var productGroup = productGroups.next();
+    	if(isProduct(productGroup)===false)
+       {
+         //Testing Purposes
+      	 //Logger.log(productGroup.getValue()+" is NOT a product")
+       }else
+       {
+         	productArray.push(productGroup.getValue())
+         	if(testingMode === false){
+            	Logger.log("Writing Data To Database...")
+            }
+         	if (productGroup.getStatsFor("LAST_30_DAYS").getClicks()<1)
+            {
+              noClickCounter++;
+              if (testingMode===true)
+              {
+                    //Logger.log("Product: "+counter)
+                    Logger.log(noClickCounter+"  Product: "+"  \""+productGroup.getValue()+"\"")
+                    Logger.log("	-Conversions: "+productGroup.getStatsFor("LAST_30_DAYS").getConversions())
+                    Logger.log("	-Imp: "+productGroup.getStatsFor("LAST_30_DAYS").getImpressions())
+                    Logger.log("	-Clicks: "+productGroup.getStatsFor("LAST_30_DAYS").getClicks())
+                    Logger.log("	-Average Position: "+productGroup.getStatsFor("LAST_30_DAYS").getAveragePosition())
+               }                                             
+              if (testingMode === false)
+              {
+              sheet.appendRow([productGroup.getValue(), productGroup.getStatsFor("LAST_30_DAYS").getImpressions(), monthDig+"\/"+todaysNumberDate, noClickCounter]);
+              }
+
+            }
+
+         }
+            
+    		counter++
+       }
+     if(testingMode === false){
+       Logger.log("\n")
+       Logger.log("\n")
+       Logger.log("Data file completed."+"\n")
+       Logger.log("You may view the results at: "+SPREADSHEET_URL)
+       Logger.log("If the above link does not work, make sure you have shared priveleges. Try this: "+"https://docs.google.com/spreadsheets/d/131uTk3lTVuf4UrTYvJwxjyvpjlgogRRZLQlFXwHnPFw/edit?usp=sharing")
+     }
+     if(testingMode === true){
+        Logger.log("\n")
+       	Logger.log("\n")
+     	Logger.log("Testing Mode complete. No Writing Took place.")
+     }
+     Logger.log("\n")
+ 	 Logger.log("\n")
+     Logger.log("-Products on merchant center: "+counter)
+  //End of main
+  }
+
+ 
+
+////////////////////////////////////////////   EXPERIMENTAL   ///////////////////////////////////////////////
+  
+    //var range = sheet.getDataRange();
+                                                                  //var values = range.getValues();
+
+
+                                                                  // This logs the spreadsheet in CSV format.
+
+                                                                   // //var string1 = "\" i=  "+i+"\""+values[i].join(',    ').toString()
+                                                                    //if(counter< values.length) {
+                                                                     // Logger.log(counter)
+                                                                          // var string1 = values[counter].join(',    ').toString()
+                                                                           //Logger.log("\" i=  "+i+"\""+values[i].join(',    '));
+                                                                       // Logger.log(string1)
+
+                                                                     //   if(string1.charAt(0)==="#"|| string1 === "Product"){
+                                                                           // Logger.log("Ignore this")
+                                                                       // }else{
+                                                                           // sheet.deleteRow(counter)
+                                                                            //sheet.appendRow([productGroup.getValue(), productGroup.getStatsFor("LAST_7_DAYS").getImpressions()]);
+                                                                        //}
+
+                                                                   //}
+
+                                                      //if(string1.charAt(0)==="#"|| string1 === "Product"){
+                                                                            //Logger.log("Ignore this")
+                                                                        //}else{
+                                                                            //sheet.deleteRow(counter)
+              
