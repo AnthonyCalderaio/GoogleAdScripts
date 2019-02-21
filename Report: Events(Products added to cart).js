@@ -34,7 +34,7 @@ function main() {
   var emailString = "" 
   
   function filterStats() {
-  var profileId = '138359559';
+  var profileId = 'xxxxxxxxx';
     
   //var startDate = "2018-11-01"
   //var endDate  = "2018-11-29"
@@ -118,11 +118,11 @@ var totalEvents = Analytics.Data.Ga.get(
   	
 /// 	 /////                           Emails					       					                       \\\\\\\													 
   else{
-    Logger.log("Email dispatched to "+"\""+"acalderaio@bestsecurityindustries.com"+"\"")
-    //Send an email to Anthony
+    Logger.log("Email dispatched to "+"\""+"emailaddres@domain.com"+"\"")
+    //Send an email to xxxxx
   	MailApp.sendEmail(
               				   //Recipient of email...
-              				   'acalderaio@bestsecurityindustries.com',
+              				   'emailaddres@domain.com',
       
               				   //Subject Field of email...
                     		   'Daily Report',
