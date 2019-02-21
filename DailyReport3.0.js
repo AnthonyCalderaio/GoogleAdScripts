@@ -118,8 +118,8 @@ function main() {
   
   function listAllProfiles() {
     
-  	var accountId = '90544538';
-  	var webPropertyId = 'UA-90544538-1';
+  	var accountId = 'xxxxxxxx';
+  	var webPropertyId = 'xxxxxxxxxxxxx';
 
   	var profiles = Analytics.Management.Profiles.list(accountId, webPropertyId);
 
@@ -136,7 +136,7 @@ function main() {
                             // See https://support.google.com/analytics/answer/1638635 to learn more about
                             // real-time reporting.
 
-                            //var profileId = '138359559';
+                            //var profileId = 'xxxxxxxxx';
 
                             //var results = Analytics.Data.Realtime.get(
                               //'ga:' + profileId,
@@ -167,7 +167,7 @@ function main() {
   
   //Get Stats with an optional filter FUNCTION
   function filterStats() {
-  var profileId = '138359559';
+  var profileId = 'xxxxxxxxx';
     
   //var startDate = "2018-11-01"
   //var endDate  = "2018-11-29"
@@ -513,7 +513,7 @@ function main() {
     //Send an email to Anthony
   	MailApp.sendEmail(
               				   //Recipient of email...
-              				   'acalderaio@bestsecurityindustries.com',
+              				   'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
       
               				   //Subject Field of email...
                     		   'Daily Report',
@@ -540,7 +540,7 @@ function main() {
 
 	MailApp.sendEmail(
               				   //Recipient of email...
-              				   'dcutherell@bestsecurityindustries.com',
+              				   'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
       
                     		   //Subject Field of email...
                     		   'Daily Report',
@@ -566,7 +566,7 @@ function main() {
 
 
 
-//Send an email to David
+//Send an email to xxxxx
   	
     
     
