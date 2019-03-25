@@ -1,8 +1,15 @@
 function main() {
   
-Logger.log("----- Regular Campaigns -----")  
-Logger.log("")
-Logger.log("")  
+  	  //Helper Function
+      function numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      }
+  
+  
+
+Logger.log("----- Regular Campaigns -----");  
+Logger.log("");
+Logger.log("");  
   
   
   var CampaignIter = AdWordsApp.campaigns().withCondition("Status = 'ENABLED'").forDateRange("LAST_30_DAYS").get();
@@ -24,26 +31,26 @@ Logger.log("")
     	var conversions = stats.getConversions();
     		conversionTotal = (parseInt(conversionTotal)+parseInt(conversions))
     
-    		Logger.log("Campaign: "+campaign.getName());
+    		Logger.log("Campai: "+campaign.getName());
     		Logger.log("Clicks: "+clicks);
-    		Logger.log("Impressions: "+impressions);
-    		Logger.log("Cost: "+cost);
-    		Logger.log("Conversion: "+conversions);
+    		Logger.log("Impres: "+impressions);
+    		Logger.log("Cost  : $"+cost);
+    		Logger.log("Conver: "+conversions);
     		Logger.log("");
     		Logger.log("");
     
   }
   				Logger.log("Regular Campaigns")
-      			Logger.log("--- Total: "+clicksTotal)
-      			Logger.log("--- Total: "+impTotal)
-      			Logger.log("--- Total: "+costTotal)
-      			Logger.log("--- Total: "+conversionTotal)
+      		Logger.log("--- (Total) Clicks: "+numberWithCommas(clicksTotal));
+      		Logger.log("--- (Total) Impres: "+numberWithCommas(impTotal));
+      		Logger.log("--- (Total) Cost  : $"+numberWithCommas(costTotal));
+      		Logger.log("--- (Total) Conver: "+numberWithCommas(conversionTotal));
   				Logger.log("");
     			Logger.log("");
   
-Logger.log("----- Shopping Campaigns -----")
-Logger.log("")
-Logger.log("") 
+Logger.log("----- Shopping Campaigns -----");
+Logger.log("");
+Logger.log(""); 
   
   var ShoppingCampaignIter = AdsApp.shoppingCampaigns().withCondition("Status = 'ENABLED'").forDateRange("LAST_30_DAYS").get();
   var ShoppingclicksTotal = 0;
@@ -56,29 +63,60 @@ Logger.log("")
     var Shoppingstats = Shoppingcampaign.getStatsFor("LAST_30_DAYS");
     
     	var Shoppingclicks = Shoppingstats.getClicks();
-    		ShoppingclicksTotal = (parseInt(ShoppingclicksTotal)+parseInt(Shoppingclicks))
+    		ShoppingclicksTotal = (parseInt(ShoppingclicksTotal)+parseInt(Shoppingclicks));
     	var Shoppingimpressions = Shoppingstats.getImpressions();
-    		ShoppingimpTotal = (parseInt(ShoppingimpTotal)+parseInt(Shoppingimpressions))
+    		ShoppingimpTotal = (parseInt(ShoppingimpTotal)+parseInt(Shoppingimpressions));
     	var Shoppingcost = Shoppingstats.getCost();
-    		ShoppingcostTotal = (parseInt(ShoppingcostTotal)+parseInt(Shoppingcost))
+    		ShoppingcostTotal = (parseInt(ShoppingcostTotal)+parseInt(Shoppingcost));
     	var Shoppingconversions = Shoppingstats.getConversions();
     		ShoppingconversionTotal = (parseInt(ShoppingconversionTotal)+parseInt(Shoppingconversions))
     
-    		Logger.log("ShoppingCampaign: "+Shoppingcampaign.getName());
+    		Logger.log("ShoppingCampai: "+Shoppingcampaign.getName());
     		Logger.log("ShoppingClicks: "+Shoppingclicks);
-    		Logger.log("ShoppingImpressions: "+Shoppingimpressions);
-    		Logger.log("ShoppingCost: "+Shoppingcost);
-    		Logger.log("ShoppingConversion: "+Shoppingconversions);
+    		Logger.log("ShoppingImpres: "+Shoppingimpressions);
+    		Logger.log("ShoppingCost  : $"+Shoppingcost);
+    		Logger.log("ShoppingConver: "+Shoppingconversions);
     		Logger.log("");
     		Logger.log("");
     
   }
-  				Logger.log("Shopping Campaigns")
-      			Logger.log("--- Shopping Total: "+ShoppingclicksTotal)
-      			Logger.log("--- Shopping Total: "+ShoppingimpTotal)
-      			Logger.log("--- Shopping Total: "+ShoppingcostTotal)
-      			Logger.log("--- Shopping Total: "+ShoppingconversionTotal)
+  				Logger.log("Shopping Campaigns");
+      		Logger.log("--- (Total) Shopping Clicks: "+numberWithCommas(ShoppingclicksTotal));
+      		Logger.log("--- (Total) Shopping Impres: "+numberWithCommas(ShoppingimpTotal));
+      		Logger.log("--- (Total) Shopping Cost  : $"+numberWithCommas(ShoppingcostTotal));
+      		Logger.log("--- (Total) Shopping Conver: "+numberWithCommas(ShoppingconversionTotal));
   				Logger.log("");
     			Logger.log("");
+  
+  
+  				    //Send an email to Anthony
+              MailApp.sendEmail(
+                                //Recipient of email...
+                                'abcdefg@hij.com',
+
+                                //Subject Field of email...
+                                'Monday Report(30DayRollingReport)',
+
+                                //Body of email...
+                      				  "Stats for the Last 30 Days..."+"\n"+"\n"+
+                      				  "--Regular Campaigns--"+"\n"+
+                                "--- (Total) Clicks: "+numberWithCommas(clicksTotal)+"\n"+
+                                "--- (Total) Impres: "+numberWithCommas(impTotal)+"\n"+
+                                "--- (Total) Cost  : $"+numberWithCommas(costTotal)+"\n"+
+                                "--- (Total) Conver: "+numberWithCommas(conversionTotal)+"\n"+
+                      				  "\n"+"\n"+
+                      
+                      
+                      
+                                "--SHOPPING CAMPAIGNS--"+"\n"+
+                                "--- (Total) Shopping Clicks: "+numberWithCommas(ShoppingclicksTotal)+"\n"+
+                                "--- (Total) Shopping Impres: "+numberWithCommas(ShoppingimpTotal)+"\n"+
+                                "--- (Total) Shopping Cost  : $"+numberWithCommas(ShoppingcostTotal)+"\n"+
+                                "--- (Total) Shopping Conver: "+numberWithCommas(ShoppingconversionTotal)
+                    );
+  
+  
+  
+  
   
 }
